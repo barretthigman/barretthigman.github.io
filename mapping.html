@@ -4,6 +4,7 @@
 
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.1/leaflet.css" />
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet-locatecontrol/0.55.0/L.Control.Locate.css" />
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.0.0/MarkerCluster.css" />
 		
 		 <style type="text/css">
 			body {  padding: 0; margin: 0;  }
@@ -15,6 +16,7 @@
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.1/leaflet.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-locatecontrol/0.55.0/L.Control.Locate.min.js" ></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.0.0/leaflet.markercluster.js"></script>
 		
 	</head>
 	<body>
@@ -93,6 +95,10 @@
 			L.control.layers(baseMaps, overlayMaps).addTo(map);
 			L.control.locate().addTo(map);
 			
+			var markers = L.markerClusterGroup();
+			
+			
+			
 			var geojsonMarkerOptions = {
     				radius: 8,
     				fillColor: "#ff7800",
@@ -102,11 +108,15 @@
     				fillOpacity: 0.8
 			};
 			
-			$.getJSON("https://web.fulcrumapp.com/shares/f4da6fb7e1f60b20.geojson", function(data) {
+			var geoJsonLayer = $.getJSON("https://web.fulcrumapp.com/shares/f4da6fb7e1f60b20.geojson", function(data) {
 			    L.geoJson(data, {
 			        style: geojsonMarkerOptions
-			    }).addTo(map);
+			    });
 			});
+			
+			markers.addLayer(geoJsonLayer);
+			
+			map.addLayer(markers);
 			
 			//Vicmap API hybrid aerial layer
 			//var VMsat = L.tileLayer('http://api.maps.vic.gov.au/geowebcacheWM/service/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=SATELLITE_WM&STYLE=_null&FORMAT=image/png&TILEMATRIXSET=BT_ESRI_EPSG:3857&TILEMATRIX=BT_ESRI_EPSG:3857:{z}&TILEROW={y}&TILECOL={x}', {
