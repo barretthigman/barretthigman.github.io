@@ -108,11 +108,7 @@
     				fillOpacity: 0.8
 			};
 			
-			var geoJsonLayer = $.getJSON("https://web.fulcrumapp.com/shares/f4da6fb7e1f60b20.geojson", function(data) {
-			    L.geoJson(data, {
-			        style: geojsonMarkerOptions
-			    });
-			});
+			var geoJsonLayer = $.getJSON("https://web.fulcrumapp.com/shares/f4da6fb7e1f60b20.geojson");
 			
 			markers.addLayer(geoJsonLayer);
 			
