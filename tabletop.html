@@ -62,7 +62,7 @@
 			L.control.layers(baseMaps).addTo(map);
 			L.control.locate().addTo(map);
 			
-			/*
+			
 			$.getJSON("https://web.fulcrumapp.com/shares/f4da6fb7e1f60b20.geojson", function(data) {
     				addGeoJsonLayerWithClustering(data);
   			});
@@ -111,7 +111,19 @@
 				
 				map.addControl(controlSearch);
 			}
-			*/
+			
+  Tabletop.init({ 
+    key: 1SMfFrI_Fslmgu09qMsFLuBE2PEToqb21o3GQaeTZqNc, //google spreadsheet id
+    callback: function(sheet, tabletop){ 
+      for (var i in sheet){
+        var place = sheet[i]; //getting e row from table
+        L.marker([place.lat, place.lon])
+          .addTo(map)
+          .bindPopup(place.name)
+      }
+    },
+    simpleSheet: true 
+  })
 		</script>	
 	</body>
  </html>
