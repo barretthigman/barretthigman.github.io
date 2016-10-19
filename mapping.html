@@ -82,13 +82,12 @@
       				markers.addLayer(geoJsonLayer);
       				map.addLayer(markers);
         			map.fitBounds(markers.getBounds());
+				
+				var searchCtrl = L.control.fuseSearch();
+				searchCtrl.addTo(map);
+			
+				searchCtrl.indexFeatures(geoJsonLayer, ['action_required']);
 			}
-  
-			var searchCtrl = L.control.fuseSearch();
-			searchCtrl.addTo(map);
-			
-			searchCtrl.indexFeatures(geoJsonLayer, ['action_required']);
-			
 			
 			
 			/*var markers = L.markerClusterGroup();
