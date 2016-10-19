@@ -83,7 +83,8 @@
         			map.fitBounds(markers.getBounds());
 			}
   
-
+			var searchCtrl = L.control.fuseSearch();
+			searchCtrl.addTo(map);
 			
 			/*var markers = L.markerClusterGroup();
 			
