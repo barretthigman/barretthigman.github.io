@@ -59,6 +59,12 @@
 				"Aerial": VMsat2
 			};
 			
+			var map = L.map('map', {
+				center	: [-36.72855, 146.96087],
+				zoom	: 17,
+				layers	: [VMmap]
+			});
+			
 			L.control.layers(baseMaps).addTo(map);
 			L.control.locate().addTo(map);
 			
@@ -79,13 +85,7 @@
           				}
       				});
       				markers.addLayer(geoJsonLayer);
-				
-				var map = L.map('map', {
-					center	: [-36.72855, 146.96087],
-					zoom	: 17,
-					layers	: [VMmap, markers]
-				});
-      				//map.addLayer(markers);
+      				map.addLayer(markers);
         			//map.fitBounds(markers.getBounds());
 			}
   
