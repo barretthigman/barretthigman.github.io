@@ -50,27 +50,6 @@
 				transparent: true,
 				version: '1.1.1',
 				attribution: "Â© Vicmap API"});
-																	
-			var ascWMSd = L.tileLayer.wms("http://maps.alpineshire.vic.gov.au/wms/bin/mapserv.exe?map=c:/ASC_Maps/80/wms/wms_server.map", {
-				layers: 'Stormwater_Lines,Stormwater_Points',
-				format: 'image/png',
-				transparent: true,
-				version: '1.1.1',
-				attribution: "Â© Alpine Shire WMS Server"});
-				
-			var ascWMSf = L.tileLayer.wms("http://maps.alpineshire.vic.gov.au/wms/bin/mapserv.exe?map=c:/ASC_Maps/80/wms/wms_server.map", {
-				layers: 'Fire_Plug-North_East_Water,Fire_Plug-East_Gippsland_Water',
-				format: 'image/png',
-				transparent: true,
-				version: '1.1.1',
-				attribution: "Â© Alpine Shire WMS Server"});
-				
-			var ascWMSb = L.tileLayer.wms("http://maps.alpineshire.vic.gov.au/wms/bin/mapserv.exe?map=c:/ASC_Maps/80/wms/wms_server.map", {
-				layers: 'Alpine_Shire_Bridges',
-				format: 'image/png',
-				transparent: true,
-				version: '1.1.1',
-				attribution: "Â© Alpine Shire WMS Server"});
 			
 			var VM = L.layerGroup([VMsat, VMhybrid])
 			
@@ -86,13 +65,7 @@
 				"Aerial": VMsat2
 			};
 			
-			var overlayMaps = {
-				"Drainage"   : ascWMSd,
-				"Fire Plugs" : ascWMSf,
-				"Bridges"    : ascWMSb
-			};	
-			
-			L.control.layers(baseMaps, overlayMaps).addTo(map);
+			L.control.layers(baseMaps).addTo(map);
 			L.control.locate().addTo(map);
 			
 			$.getJSON("https://web.fulcrumapp.com/shares/f4da6fb7e1f60b20.geojson", function(data) {
@@ -100,7 +73,12 @@
   			});
 			
 			function addGeoJsonLayerWithClustering(data) {
-      				var markers = L.markerClusterGroup({spiderfyOnMaxZoom: false, showCoverageOnHover: false, zoomToBoundsOnClick: false});
+      				var markers = L.markerClusterGroup({
+					spiderfyOnMaxZoom: true,
+					showCoverageOnHover: false,
+					zoomToBoundsOnClick: true,
+					removeOutsideVisibleBounds: true
+				});
       				var geoJsonLayer = L.geoJson(data, {
           				onEachFeature: function (feature, layer) {
               					layer.bindPopup(feature.properties.fulcrum_id);
