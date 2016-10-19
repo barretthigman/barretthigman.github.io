@@ -62,6 +62,9 @@
 			L.control.layers(baseMaps).addTo(map);
 			L.control.locate().addTo(map);
 			
+			var searchCtrl = L.control.fuseSearch();
+			searchCtrl.addTo(map);
+			
 			$.getJSON("https://web.fulcrumapp.com/shares/f4da6fb7e1f60b20.geojson", function(data) {
     				addGeoJsonLayerWithClustering(data);
   			});
@@ -82,12 +85,9 @@
       				markers.addLayer(geoJsonLayer);
       				map.addLayer(markers);
         			map.fitBounds(markers.getBounds());
-				
-				var searchCtrl = L.control.fuseSearch();
-				searchCtrl.addTo(map);
-			
-				searchCtrl.indexFeatures(geoJsonLayer, ['action_required']);
 			}
+
+			searchCtrl.indexFeatures(jsonData, ['action_required']);
 			
 			
 			/*var markers = L.markerClusterGroup();
