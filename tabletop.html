@@ -3,6 +3,10 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.1/leaflet.css" />
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet-locatecontrol/0.55.0/L.Control.Locate.css" />
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.0.0/MarkerCluster.Default.css" />
+		<link rel="stylesheet" href="https://cdn.rawgit.com/naomap/leaflet-fusesearch/master/src/leaflet.fusesearch.css" />
+		<link rel="stylesheet" href="https://cdn.rawgit.com/stefanocudini/leaflet-search/master/src/leaflet-search.css" />
 		
 		 <style type="text/css">
 			body {  padding: 0; margin: 0;  }
@@ -12,7 +16,11 @@
 		<title>Assets</title>
 		
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.1/leaflet.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-locatecontrol/0.55.0/L.Control.Locate.min.js" ></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.0.0/leaflet.markercluster.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/tabletop.js/1.4.3/tabletop.min.js"></script>
+		<script src="https://cdn.rawgit.com/stefanocudini/leaflet-search/master/src/leaflet-search.js"></script>
 		
 	</head>
 	<body>
@@ -52,6 +60,56 @@
 			});
 			
 			L.control.layers(baseMaps).addTo(map);
-    </script>
-  </body>
-</html>
+			L.control.locate().addTo(map);
+			
+			$.getJSON("https://web.fulcrumapp.com/shares/f4da6fb7e1f60b20.geojson", function(data) {
+    				addGeoJsonLayerWithClustering(data);
+  			});
+			
+			function addGeoJsonLayerWithClustering(data) {
+      				var markers = L.markerClusterGroup({
+					spiderfyOnMaxZoom: true,
+					showCoverageOnHover: false,
+					zoomToBoundsOnClick: true,
+					removeOutsideVisibleBounds: true,
+					maxClusterRadius: 60
+				});
+      				var geoJsonLayer = L.geoJson(data, {
+          				onEachFeature: function (feature, layer) {
+						layer.bindPopup(feature.properties.action_required);
+          				}
+      				});
+      				markers.addLayer(geoJsonLayer);
+      				map.addLayer(markers);
+        			map.fitBounds(markers.getBounds());
+				
+				var controlSearch = new L.Control.Search({
+					position:'topleft',		
+					layer: markers,
+					propertyName: 'fulcrum_id',
+					initial: false,
+					zoom: 19,
+					marker: {
+						icon: false,
+						animate: true,
+						circle: {					
+							radius: 10,
+							weight: 3,
+							color: '#e03',
+							stroke: true,
+							fill: false
+						}
+					},
+					autoType: true
+					//moveToLocation: function(latlng, title, map) {
+					//	map.fitBounds(latlng.layer.getBounds());
+						//var zoom = map.getBoundsZoom(latlng.layer.getBounds());
+  						//map.setView(latlng, zoom); // access the zoom
+					//}
+				});
+				
+				map.addControl(controlSearch);
+			}
+		</script>	
+	</body>
+ </html>
