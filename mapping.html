@@ -75,7 +75,8 @@
 				});
       				var geoJsonLayer = L.geoJson(data, {
           				onEachFeature: function (feature, layer) {
-              					layer.bindPopup(feature.properties.fulcrum_id);
+              					layer.bindPopup(feature.properties.action_required);
+						feature.layer = layer;
           				}
       				});
       				markers.addLayer(geoJsonLayer);
@@ -85,6 +86,10 @@
   
 			var searchCtrl = L.control.fuseSearch();
 			searchCtrl.addTo(map);
+			
+			searchCtrl.indexFeatures(geoJsonLayer, ['action_required']);
+			
+			
 			
 			/*var markers = L.markerClusterGroup();
 			
