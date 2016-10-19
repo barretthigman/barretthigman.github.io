@@ -87,10 +87,19 @@
 					layer: markers,
 					propertyName: 'fulcrum_id',
 					initial: false,
-					zoom: 22,
-					marker: true,
-					autoType: true,
-					circleLocation: false
+					zoom: 19,
+					marker: {
+						icon: false,
+						animate: true,
+						circle: {					
+							radius: 10,
+							weight: 3,
+							color: '#e03',
+							stroke: true,
+							fill: false
+						}
+					},
+					autoType: true
 					//moveToLocation: function(latlng, title, map) {
 					//	map.fitBounds(latlng.layer.getBounds());
 						//var zoom = map.getBoundsZoom(latlng.layer.getBounds());
