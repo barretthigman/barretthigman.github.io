@@ -85,9 +85,11 @@
       				markers.addLayer(geoJsonLayer);
       				map.addLayer(markers);
         			map.fitBounds(markers.getBounds());
+				
+				searchCtrl.indexFeatures(geoJsonLayer, ['action_required']);
 			}
 
-			searchCtrl.indexFeatures(jsonData, ['action_required']);
+			
 			
 			
 			/*var markers = L.markerClusterGroup();
