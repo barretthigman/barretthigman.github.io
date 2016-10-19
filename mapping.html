@@ -6,6 +6,7 @@
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet-locatecontrol/0.55.0/L.Control.Locate.css" />
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.0.0/MarkerCluster.Default.css" />
 		<link rel="stylesheet" href="https://cdn.rawgit.com/naomap/leaflet-fusesearch/master/src/leaflet.fusesearch.css" />
+		<link rel="stylesheet" href="https://cdn.rawgit.com/stefanocudini/leaflet-search/master/src/leaflet-search.css" />
 		
 		 <style type="text/css">
 			body {  padding: 0; margin: 0;  }
@@ -19,6 +20,7 @@
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.0.0/leaflet.markercluster.js"></script>
 		<script src="https://cdn.rawgit.com/naomap/leaflet-fusesearch/master/src/leaflet.fusesearch.js"></script>
+		<script src="https://cdn.rawgit.com/stefanocudini/leaflet-search/master/src/leaflet-search.js"></script>
 		
 	</head>
 	<body>
@@ -62,8 +64,8 @@
 			L.control.layers(baseMaps).addTo(map);
 			L.control.locate().addTo(map);
 			
-			var searchCtrl = L.control.fuseSearch();
-			searchCtrl.addTo(map);
+			//var searchCtrl = L.control.fuseSearch();
+			//searchCtrl.addTo(map);
 			
 			$.getJSON("https://web.fulcrumapp.com/shares/f4da6fb7e1f60b20.geojson", function(data) {
     				addGeoJsonLayerWithClustering(data);
@@ -79,14 +81,24 @@
       				var geoJsonLayer = L.geoJson(data, {
           				onEachFeature: function (feature, layer) {
               					layer.bindPopup(feature.properties.action_required);
-						feature.layer = layer;
+						//feature.layer = layer;
           				}
       				});
       				markers.addLayer(geoJsonLayer);
       				map.addLayer(markers);
         			map.fitBounds(markers.getBounds());
 				
-				searchCtrl.indexFeatures(geoJsonLayer, ['action_required']);
+				var controlSearch = new L.Control.Search({
+					position:'topright',		
+					layer: geoJsonLayer,
+					initial: false,
+					zoom: 12,
+					marker: false
+				});
+				
+				map.addControl(controlSearch);
+				
+				//searchCtrl.indexFeatures(geoJsonLayer, ['action_required']);
 			}
 
 			
