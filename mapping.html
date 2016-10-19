@@ -71,7 +71,8 @@
 					spiderfyOnMaxZoom: true,
 					showCoverageOnHover: false,
 					zoomToBoundsOnClick: true,
-					removeOutsideVisibleBounds: true
+					removeOutsideVisibleBounds: true,
+					maxClusterRadius: 100
 				});
       				var geoJsonLayer = L.geoJson(data, {
           				onEachFeature: function (feature, layer) {
