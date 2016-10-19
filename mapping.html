@@ -76,7 +76,7 @@
 				});
       				var geoJsonLayer = L.geoJson(data, {
           				onEachFeature: function (feature, layer) {
-						layer.bindPopup("<b>"+feature.properties.action_required+"</b>");
+						layer.bindPopup("<b>Action required: "+feature.properties.action_required+"</b><br><br>Priority: "+feature.properties.priority+"<br>Equipment required: "+feature.properties.equipment_required+"<br>Defect comments: "+feature.properties.defect_comments+"<br>Photos: <a href="+feature.properties.defect_photos_url+">Link</a>");
           				}
       				});
       				markers.addLayer(geoJsonLayer);
