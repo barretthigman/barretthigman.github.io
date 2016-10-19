@@ -87,7 +87,7 @@
 			};
 			
 			var overlayMaps = {
-				"Drainage" 	 : ascWMSd,
+				"Drainage"   : ascWMSd,
 				"Fire Plugs" : ascWMSf,
 				"Bridges"    : ascWMSb
 			};	
@@ -100,7 +100,7 @@
   			});
 			
 			function addGeoJsonLayerWithClustering(data) {
-      				var markers = L.markerClusterGroup();
+      				var markers = L.markerClusterGroup({spiderfyOnMaxZoom: false, showCoverageOnHover: false, zoomToBoundsOnClick: false});
       				var geoJsonLayer = L.geoJson(data, {
           				onEachFeature: function (feature, layer) {
               					layer.bindPopup(feature.properties.fulcrum_id);
