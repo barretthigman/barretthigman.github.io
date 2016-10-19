@@ -52,12 +52,6 @@
 				attribution: "Â© Vicmap API"});
 			
 			var VM = L.layerGroup([VMsat, VMhybrid])
-			
-			var map = L.map('map', {
-				center	: [-36.72855, 146.96087],
-				zoom	: 17,
-				layers	: [VMmap, markers]
-			});
 						
 			var baseMaps = {
 				"Map"	: VMmap,
@@ -85,10 +79,17 @@
           				}
       				});
       				markers.addLayer(geoJsonLayer);
-      				map.addLayer(markers);
+				
+				var map = L.map('map', {
+					center	: [-36.72855, 146.96087],
+					zoom	: 17,
+					layers	: [VMmap, markers]
+				});
+      				//map.addLayer(markers);
         			//map.fitBounds(markers.getBounds());
 			}
   
+
 			
 			/*var markers = L.markerClusterGroup();
 			
