@@ -28,35 +28,27 @@
 				format: 'image/png',
 				transparent: true,
 				version: '1.1.1',
-				attribution: "Â© Vicmap API"});
+				attribution: "© Vicmap API"});
 			
 			var VMhybrid = L.tileLayer.wms("http://api.maps.vic.gov.au/geowebcacheWM/service/wms?", {
 				layers: 'HYBRID_MERCATOR',
 				format: 'image/png',
 				transparent: true,
 				version: '1.1.1',
-				attribution: "Â© Vicmap API"});
+				attribution: "© Vicmap API"});
 			
 			var VMsat = L.tileLayer.wms("http://api.maps.vic.gov.au/geowebcacheWM/service/wms?", {
 				layers: 'SATELLITE_WM',
 				format: 'image/png',
 				transparent: true,
 				version: '1.1.1',
-				attribution: "Â© Vicmap API"});
-				
-			var VMsat2 = L.tileLayer.wms("http://api.maps.vic.gov.au/geowebcacheWM/service/wms?", {
-				layers: 'SATELLITE_WM',
-				format: 'image/png',
-				transparent: true,
-				version: '1.1.1',
-				attribution: "Â© Vicmap API"});
+				attribution: "© Vicmap API"});
 			
 			var VM = L.layerGroup([VMsat, VMhybrid]);
 						
 			var baseMaps = {
 				"Map"	: VMmap,
-				"Hybrid": VM,
-				"Aerial": VMsat2
+				"Aerial": VM,
 			};
 			
 			var map = L.map('map', {
