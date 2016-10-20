@@ -19,6 +19,7 @@
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.0.0/leaflet.markercluster.js"></script>
 		<script src="https://cdn.rawgit.com/stefanocudini/leaflet-search/master/src/leaflet-search.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-hash/0.2.1/leaflet-hash.js"></script>
 		
 	</head>
 	<body>
@@ -107,6 +108,7 @@
 				});
 				
 				map.addControl(controlSearch);
+				var hash = new L.Hash(map);
 			}
 		</script>	
 	</body>
