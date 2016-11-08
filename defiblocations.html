@@ -57,7 +57,9 @@
 			};
 			
 			var map = L.map('map', {
-				layers	: [VMmap]
+				center	: [-36.74743, 146.97084],
+				zoom	: 14,
+				layers	: [VMmap, ascWMS]
 			});
 			
 			L.control.layers(baseMaps).addTo(map);
