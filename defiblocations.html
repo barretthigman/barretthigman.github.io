@@ -70,6 +70,13 @@
  			map.addLayer(drawnItems);
  
        			var drawControl = new L.Control.Draw({
+				draw: {
+					polyline: false,
+           				polygon: false,
+            				circle: false,
+					rectangle: false,
+            				marker: true
+				},
            			edit: {
                				featureGroup: drawnItems
           			}
