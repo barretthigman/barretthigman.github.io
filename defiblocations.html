@@ -74,25 +74,24 @@
         				"type": "Feature",
             				"properties": {},
             				"geometry": {
-                			"type": "Point",
-                			"coordinates": [e.latlng.lat, e.latlng.lng]
-        			}
-    			};
-   
-    			var marker;
-    			L.geoJson(geojsonFeature, {
-       				pointToLayer: function(feature, latlng){
-				marker = L.marker(e.latlng, {
-						title: "Works/Occpuation Location",
-                				alt: "Works/Occpuation Location",
-                				riseOnHover: true,
-                				draggable: true,
- 					}).bindPopup("<input type='button' value='Delete' class='marker-delete-button'/>");
-					marker.on("popupopen", onPopupOpen);
-					return marker;
-				}
-			}).addTo(map);
-  			//};
+                				"type": "Point",
+                				"coordinates": [e.latlng.lat, e.latlng.lng]
+        				}
+    				};
+    				var marker;
+    				L.geoJson(geojsonFeature, {
+       					pointToLayer: function(feature, latlng){
+						marker = L.marker(e.latlng, {
+							title: "Works/Occpuation Location",
+                					alt: "Works/Occpuation Location",
+                					riseOnHover: true,
+                					draggable: true,
+ 						}).bindPopup("<input type='button' value='Delete' class='marker-delete-button'/>");
+						marker.on("popupopen", onPopupOpen);
+						return marker;
+					}
+				}).addTo(map);
+  			};
  
   			//delete points from map
   			function onPopupOpen() {
