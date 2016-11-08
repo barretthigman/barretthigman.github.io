@@ -65,6 +65,58 @@
 			L.control.layers(baseMaps).addTo(map);
 			L.control.locate().addTo(map);
 
+			 var featureGroup = new L.FeatureGroup();
+  map.addLayer(featureGroup);
+ 
+  var drawControlFull = new L.Control.Draw({
+    edit: {
+      featureGroup: featureGroup,
+      edit: false,
+      remove: true
+    },
+    draw: {
+      polyline: false,
+      marker: false,
+      circle: false,
+      polygon: false
+    }
+  });
+ 
+  var drawControlEditOnly = new L.Control.Draw({
+    edit: {
+      featureGroup: featureGroup,
+      edit: false,
+      remove: true
+    },
+    draw: false
+  });
+ 
+  map.addControl(drawControlFull);
+ 
+  map.on('draw:created', function (e) {
+    //var type = e.layerType,
+    var layer = e.layer;
+    layer.addTo(featureGroup);
+    drawControlFull.removeFrom(map);
+    drawControlEditOnly.addTo(map);
+   
+    //if (type === 'polygon') {
+    //var shape = layer.toGeoJSON();
+    //var shape_for_db = JSON.stringify(shape);
+    //$('input#field_64').val(shape_for_db);
+   
+    //console.log($('input#field_64').val());
+    //}
+ 
+    // Do whatever else you need to. (save to db, add to map etc)
+    featureGroup.addLayer(layer);
+  });
+  map.on("draw:deleted", function(e) {
+    drawControlEditOnly.removeFrom(map);
+    drawControlFull.addTo(map);
+  });
+			
+			/*
 			 //on mouse click
   			map.on('click', onMapClick); 
  
@@ -101,7 +153,7 @@
         				map.removeLayer(tempMarker);
     				});
   			};
-			
+			*/
        			/*var drawControl = new L.Control.Draw({
 				draw: {
 					polyline: false,
