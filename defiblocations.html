@@ -65,7 +65,7 @@
 			L.control.layers(baseMaps).addTo(map);
 			L.control.locate().addTo(map);
 
-			var url = "https://{username}.carto.com/api/v2/sql?format=geojson&q=SELECT cartodb_id,the_geom FROM defib_locations";
+			var url = "https://barretthigman.carto.com/api/v2/sql?format=geojson&q=SELECT cartodb_id,the_geom FROM defib_locations";
 			$.getJSON(url, function(data) {
 				geojsonLayer = L.geoJson(data, {
 					onEachFeature: function (feature, layer) {
