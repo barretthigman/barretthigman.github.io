@@ -66,7 +66,17 @@
 			L.control.layers(baseMaps).addTo(map);
 			L.control.locate().addTo(map);
 			
-			var editableLayers = new L.FeatureGroup();
+			var drawnItems = new L.FeatureGroup();
+ 			map.addLayer(drawnItems);
+ 
+       			var drawControl = new L.Control.Draw({
+           			edit: {
+               				featureGroup: drawnItems
+          			}
+      			});
+       			map.addControl(drawControl);
+			
+			/*var editableLayers = new L.FeatureGroup();
     			map.addLayer(editableLayers);
 			
 			var MyCustomMarker = L.Icon.extend({
@@ -105,7 +115,7 @@
             				layer.bindPopup('A popup!');
         			}
         			editableLayers.addLayer(layer);
-    			});	
+    			});*/	
 		</script>	
 	</body>
  </html>
