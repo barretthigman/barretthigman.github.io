@@ -50,11 +50,30 @@
 				version: '1.1.1',
 				attribution: "© Vicmap API"});
 			
-			var VM = L.layerGroup([VMsat, VMhybrid]);
-						
 			var drawnItems = new L.FeatureGroup();
- 			//map.addLayer(drawnItems);
+ 			map.addLayer(drawnItems);
+			
+			var VM = L.layerGroup([VMsat, VMhybrid]);
+			var baseMaps = {
+				"Map"	: VMmap,
+				"Aerial": VM,
+				"Test": drawnItems
+			};
+			
+			var map = L.map('map', {
+				center	: [-36.74743, 146.97084],
+				zoom	: 14,
+				layers	: [VMmap]
+			});
+			
+			L.control.layers(baseMaps).addTo(map);
+			L.control.locate().addTo(map);
+			
+
  
+			
+			
+			
        			var drawControl = new L.Control.Draw({
 				draw: {
 					polyline: false,
@@ -68,21 +87,6 @@
           			}
       			});
        			map.addControl(drawControl);
-			
-			var baseMaps = {
-				"Map"	: VMmap,
-				"Aerial": VM,
-				"Edit Layer": drawnItems
-			};
-			
-			var map = L.map('map', {
-				center	: [-36.74743, 146.97084],
-				zoom	: 14,
-				layers	: [VMmap]
-			});
-			
-			L.control.layers(baseMaps).addTo(map);
-			L.control.locate().addTo(map);
 			
 			/*var editableLayers = new L.FeatureGroup();
     			map.addLayer(editableLayers);
