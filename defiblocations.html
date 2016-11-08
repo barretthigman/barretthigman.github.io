@@ -50,14 +50,14 @@
 				version: '1.1.1',
 				attribution: "© Vicmap API"});
 			
-			var drawnItems = new L.FeatureGroup();
- 			map.addLayer(drawnItems);
+			//var drawnItems = new L.FeatureGroup();
+ 			//map.addLayer(drawnItems);
 			
 			var VM = L.layerGroup([VMsat, VMhybrid]);
 			var baseMaps = {
 				"Map"	: VMmap,
-				"Aerial": VM,
-				"Test": drawnItems
+				"Aerial": VM//,
+				//"Test": drawnItems
 			};
 			
 			var map = L.map('map', {
