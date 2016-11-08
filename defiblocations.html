@@ -68,13 +68,59 @@
 			
 			L.control.layers(baseMaps).addTo(map);
 			L.control.locate().addTo(map);
-			
 
+			 //on mouse click
+  map.on('click', onMapClick); 
  
+  //add points to map
+  function onMapClick(e){
+    var geojsonFeature = {
+        "type": "Feature",
+            "properties": {},
+            "geometry": {
+                "type": "Point",
+                "coordinates": [e.latlng.lat, e.latlng.lng]
+        }
+    }
+   
+    var marker;
+ 
+    L.geoJson(geojsonFeature, {
+       
+        pointToLayer: function(feature, latlng){
+           
+            marker = L.marker(e.latlng, {
+               
+                title: "Works/Occpuation Location",
+                alt: "Works/Occpuation Location",
+                riseOnHover: true,
+                draggable: true,
+ 
+            }).bindPopup("<input type='button' value='Delete' class='marker-delete-button'/>");
+ 
+            marker.on("popupopen", onPopupOpen);
+      
+            return marker;
+        }
+    }).addTo(map);
+  };
+ 
+  //delete points from map
+  function onPopupOpen() {
+ 
+    var tempMarker = this;
+ 
+    //var tempMarkerGeoJSON = this.toGeoJSON();
+ 
+    //var lID = tempMarker._leaflet_id; // Getting Leaflet ID of this marker
+ 
+    // To remove marker on click of delete
+    $(".marker-delete-button:visible").click(function () {
+        map.removeLayer(tempMarker);
+    });
+  };
 			
-			
-			
-       			var drawControl = new L.Control.Draw({
+       			/*var drawControl = new L.Control.Draw({
 				draw: {
 					polyline: false,
            				polygon: false,
@@ -86,7 +132,7 @@
                				featureGroup: drawnItems
           			}
       			});
-       			map.addControl(drawControl);
+       			map.addControl(drawControl);*/
 			
 			/*var editableLayers = new L.FeatureGroup();
     			map.addLayer(editableLayers);
