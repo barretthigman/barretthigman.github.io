@@ -75,7 +75,7 @@
 				});
       				var geoJsonLayer = L.geoJson(data, {
           				onEachFeature: function (feature, layer) {
-						layer.bindPopup("<b>Action required: "+feature.properties.action_required_no_component+"</b><br><br>Priority: "+feature.properties.response_level+"<br>Equipment required: "+feature.properties.resources_required+"<br>Defect comments: "+feature.properties.created_comments+"<br>Photos: <a href="+feature.properties.defect_photos_url+" target="+'"_blank"'+">Link</a>"+"<br><br>"+feature.properties.fulcrum_id);
+						layer.bindPopup("<b>Action required: "+feature.properties.action_required_no_component+"</b><br><br>Priority: "+feature.properties.response_level+"<br>Equipment required: "+feature.properties.resources_required+"<br>Defect comments: "+feature.properties.created_comments+"<br>Photos: <a href="+feature.properties.photos_url+" target="+'"_blank"'+">Link</a>"+"<br><br>"+feature.properties.fulcrum_id);
           				}
       				});
       				markers.addLayer(geoJsonLayer);
