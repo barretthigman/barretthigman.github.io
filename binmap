@@ -1,0 +1,69 @@
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+		
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.3/leaflet.css" />
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet-locatecontrol/0.55.0/L.Control.Locate.css" />
+		
+		<style type="text/css">
+			body {  padding: 0; margin: 0;  }
+			html, body, #map {  height: 100%;  }
+		</style>
+		
+		<title>Bin Map</title>
+		
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.3/leaflet.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-locatecontrol/0.55.0/L.Control.Locate.min.js" ></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-hash/0.2.1/leaflet-hash.js"></script>
+	</head>
+	<body>
+		<div id="map"></div>
+		<script>
+    var VMmap = L.tileLayer.wms("http://api.maps.vic.gov.au/geowebcacheWM/service/wms?", {
+				layers: 'WEB_MERCATOR',
+				format: 'image/png',
+				transparent: true,
+				version: '1.1.1',
+				attribution: "© Vicmap API"});
+						
+			var VMhybrid = L.tileLayer.wms("http://api.maps.vic.gov.au/geowebcacheWM/service/wms?", {
+				layers: 'HYBRID_MERCATOR',
+				format: 'image/png',
+				transparent: true,
+				version: '1.1.1',
+				attribution: "© Vicmap API"});
+				
+			var VMsat = L.tileLayer.wms("http://api.maps.vic.gov.au/geowebcacheWM/service/wms?", {
+				layers: 'SATELLITE_WM',
+				format: 'image/png',
+				transparent: true,
+				version: '1.1.1',
+				attribution: "© Vicmap API"});
+				
+			var VMsat2 = L.tileLayer.wms("http://api.maps.vic.gov.au/geowebcacheWM/service/wms?", {
+				layers: 'SATELLITE_WM',
+				format: 'image/png',
+				transparent: true,
+				version: '1.1.1',
+				attribution: "© Vicmap API"});
+			
+			var VM = L.layerGroup([VMsat, VMhybrid])
+			
+			var map = L.map('map', {
+				center	: [-36.74743, 146.97084],
+				zoom	: 14,
+				layers	: [VMmap]
+			});
+						
+			var baseMaps = {
+				"Map"	: VMmap,
+				"Hybrid": VM,
+				"Aerial": VMsat2
+			};
+			
+			L.control.layers(baseMaps).addTo(map);
+			L.control.locate().addTo(map);
+			var hash = new L.Hash(map);
+    </script>
+	</body>
+ </html>
