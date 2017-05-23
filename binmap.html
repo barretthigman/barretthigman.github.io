@@ -15,6 +15,7 @@
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.3/leaflet.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-locatecontrol/0.55.0/L.Control.Locate.min.js" ></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-hash/0.2.1/leaflet-hash.js"></script>
+		<script src="/js/leaflet-0.7.2/leaflet.ajax.min.js"></script>
 	</head>
 	<body>
 		<div id="map"></div>
@@ -64,6 +65,9 @@
 			L.control.layers(baseMaps).addTo(map);
 			L.control.locate().addTo(map);
 			var hash = new L.Hash(map);
-    </script>
+			
+			var geojsonLayer = new L.GeoJSON.AJAX("http://data.gov.au/dataset/fdb733a7-5f75-4e28-9856-a741b4c02c59/resource/9b49d0c3-8d21-4636-bea2-904f181c57b5/download/alpine-shire-council-garbage-collection-zones.json");       
+			geojsonLayer.addTo(map);
+    		</script>
 	</body>
  </html>
