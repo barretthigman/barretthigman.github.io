@@ -5,7 +5,7 @@
 		<link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" integrity="sha512-07I2e+7D8p6he1SIM+1twR5TIrhUQn9+I6yjqD53JQjFiMf8EtC93ty0/5vJTZGF8aAocvHYNEDJajGdNx1IsQ==" crossorigin=""/>
 		
 		<script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js" integrity="sha512-A7vV8IFfih/D732iSSKi20u/ooOfj/AGehOKq0f4vLT1Zr2Y+RX7C+w8A1gaSasGtRUZpF/NZgzSAu4/Gc41Lg==" crossorigin=""></script>
-		<script src="/js/"></script>
+		<script src="/js/leaflet.ajax.min.js"></script>
 		
 		<style type="text/css">
 			body {  padding: 0; margin: 0;  }
@@ -24,7 +24,10 @@
     				maxZoom: 18,
     				id: 'mapbox.streets',
     				accessToken: 'pk.eyJ1IjoiYmhpZ21hbiIsImEiOiJjajMydzltdDcwMGlpMzNtcmF3OWgyNDJvIn0.hk3TG6MfVQ8GFBVu8asjEA'
-			}).addTo(mymap);			
+			}).addTo(mymap);
+			
+			var geojsonLayer = new L.GeoJSON.AJAX("http://data.gov.au/dataset/fdb733a7-5f75-4e28-9856-a741b4c02c59/resource/9b49d0c3-8d21-4636-bea2-904f181c57b5/download/alpine-shire-council-garbage-collection-zones.json");
+			geojsonLayer.addTo(mymap);
     		</script>
 	</body>
  </html>
