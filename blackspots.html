@@ -16,14 +16,14 @@
 
 <div id='map'></div>
 <script>
-    $.ajax({
+    var blackspots = $.ajax({
         url:"https://cors-anywhere.herokuapp.com/https://drive.google.com/open?id=1OO8-c5rXfuDBKLIgd5vtAUyjWW_d5V-L",
         dataType: "json",
         success: console.log("Data successfully loaded!"),
         error: function (xhr) {
            alert(xhr.statusText)
         }
-    })  
+    });  
     
     mapboxgl.accessToken = 'pk.eyJ1IjoiYmhpZ21hbiIsImEiOiJjam96bXl5em4xaHZyM2tvM2N6OXR4OTJyIn0.vz5ZQkA92nD_2wVenoNxqw';
     var map = new mapboxgl.Map({
