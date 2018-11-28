@@ -43,7 +43,7 @@
 			var deviceType = entries[entry].gsx$devicetype.$t;
 			
 			if (longitude != 'unknown' && latitude != 'unknown') {
-				var tempFeature = '{"type": "Feature","geometry": {"type": "Point","coordinates": [' + longitude + ',' + latitude + ']},"properties": {"description":"<strong>Loss of signal</strong><p>Device type: ' + deviceType + '<br>Date/time: ' + date + '<br>Latitude: ' + latitude + '<br>Longitude: ' + longitude + '<br>Altitude: ' + altitude + 'm<br><br><a href=\\"' + photoUrl + '\\" target=\\"_blank\\"><img src=\\"https://drive.google.com/uc?export=view&s=50&id=' + photoId + '\\" style=\\"width: 500px; max-width: 100%; height: auto\\" title=\\"Click for the larger version.\\"/></a></p>"}}';
+				var tempFeature = '{"type": "Feature","geometry": {"type": "Point","coordinates": [' + longitude + ',' + latitude + ']},"properties": {"description":"<strong>Loss of signal</strong><p>Device type: ' + deviceType + '<br>Date/time: ' + date + '<br>Latitude: ' + latitude + '<br>Longitude: ' + longitude + '<br>Altitude: ' + altitude + 'm<br><br><a href=\\"' + photoUrl + '\\" target=\\"_blank\\"><img src=\\"https://drive.google.com/uc?export=view&s=50&id=' + photoId + '\\" style=\\"width: 100px; max-width: 100%; height: auto\\" title=\\"Click for the larger version.\\"/></a></p>"}}';
 				if (first) {
 					jsonFeature = tempFeature;
 					first = false;
