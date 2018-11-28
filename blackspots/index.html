@@ -6,7 +6,7 @@
     <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
     <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.51.0/mapbox-gl.js'></script>
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-    
+	
 	<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
 	<link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.51.0/mapbox-gl.css' rel='stylesheet' />
     <style>
@@ -17,7 +17,9 @@
 <body>
 
 <div id='map'></div>
+
 <script>   
+	// read blackspot data from google sheet
 	var blackspots = $.ajax({
         url:"https://spreadsheets.google.com/feeds/list/1xQrjIMeHSSPnSzXkNDpFiLKf8SlMqekvNItBqxIPNhs/1/public/full?alt=json",
         dataType: "json",
@@ -30,6 +32,7 @@
 	var jsonFeature;
 	var first = true;
 	
+	// when loading blackspot data is complete
 	$.when(blackspots).done(function() {
 		var entries = blackspots.responseJSON.feed.entry;
 		for (entry in entries) {
@@ -41,9 +44,11 @@
 			var photoUrl = entries[entry].gsx$photourl.$t;
 			var photoId = entries[entry].gsx$photoid.$t;
 			var deviceType = entries[entry].gsx$devicetype.$t;
-			
+			var markerType = deviceType.toLowerCase() + '-marker';
+				
+			// if coords as available build json feature elements
 			if (longitude != 'unknown' && latitude != 'unknown') {
-				var tempFeature = '{"type": "Feature","geometry": {"type": "Point","coordinates": [' + longitude + ',' + latitude + ']},"properties": {"description":"<strong>Loss of signal</strong><p>Device type: ' + deviceType + '<br>Date/time: ' + date + '<br>Latitude: ' + latitude + '<br>Longitude: ' + longitude + '<br>Altitude: ' + altitude + 'm<br><br><a href=\\"' + photoUrl + '\\" target=\\"_blank\\"><img src=\\"https://drive.google.com/uc?export=view&s=50&id=' + photoId + '\\" style=\\"width: 250px; max-width: 100%; height: auto\\" title=\\"Click for the larger version.\\"/></a></p>"}}';
+				var tempFeature = '{"type": "Feature","geometry": {"type": "Point","coordinates": [' + longitude + ',' + latitude + ']},"properties": {"marker-type":"' + markerType + '","description":"<strong>Loss of signal</strong><p>Device type: ' + deviceType + '<br>Date/time: ' + date + '<br>Latitude: ' + latitude + '<br>Longitude: ' + longitude + '<br>Altitude: ' + altitude + 'm<br><br><a href=\\"' + photoUrl + '\\" target=\\"_blank\\"><img src=\\"https://drive.google.com/uc?export=view&id=' + photoId + '\\" style=\\"width: 250px; max-width: 100%; height: auto\\" title=\\"Click for the larger version.\\"/></a></p>"}}';				
 				if (first) {
 					jsonFeature = tempFeature;
 					first = false;
@@ -53,21 +58,35 @@
 			}
 		}
 		
+		// create mapbox map
 		mapboxgl.accessToken = 'pk.eyJ1IjoiYmhpZ21hbiIsImEiOiJjam96bXl5em4xaHZyM2tvM2N6OXR4OTJyIn0.vz5ZQkA92nD_2wVenoNxqw';
 			var map = new mapboxgl.Map({
-			container: 'map', // container id
-			style: 'mapbox://styles/mapbox/streets-v9', // stylesheet location
-			center: [146.9715,-36.7707], // starting position [lng, lat]
-			zoom: 9 // starting zoom
-		});
-		var jsonFeatureCollection = JSON.parse('{"id": "markers","type": "symbol","source": {"type": "geojson","data": {"type": "FeatureCollection","features": [' + jsonFeature + ']}},"layout": {"icon-image": "custom-marker"}}');
-		
-		map.loadImage("https://i.imgur.com/MK4NUzI.png", function(error, image) {
-			if (error) throw error;
-			map.addImage("custom-marker", image);
+			container: 'map', 
+			style: 'mapbox://styles/mapbox/light-v9', 
+			center: [146.9715,-36.7707], 
+			zoom: 9 
 		});
 		
+		// build json feature collection
+		var jsonFeatureCollection = JSON.parse('{"id": "markers","type": "symbol","source": {"type": "geojson","data": {"type": "FeatureCollection","features": [' + jsonFeature + ']}},"layout": {"icon-image": "{marker-type}"}}');
+		
+		// images for blackspot type
+		const images = [
+			{imageUrl: "https://cors-anywhere.herokuapp.com/https://drive.google.com/uc?export=view&id=1MvcJm6CNUJ9A6fYMNHSK7vCd99mn_cH6", id: "mobile-marker"},
+			{imageUrl: "https://cors-anywhere.herokuapp.com/https://drive.google.com/uc?export=view&id=18Ja0aMESAHfmEDLjHcLRzW17zXzQE-MM", id: "handheld-marker"},
+			{imageUrl: "https://cors-anywhere.herokuapp.com/https://drive.google.com/uc?export=view&id=1prLKRiA3bJUdelD7_KfnHqzdh6NAEjj6", id: "unknown-marker"}
+		]
+		
+		// load images
+		images.forEach(img => {
+			map.loadImage(img.imageUrl, function(error, res) {
+				map.addImage(img.id, res)
+			})
+		})
+		
+		// on load of map
 		map.on('load', function() {
+			// add layer to map
 			map.addLayer(jsonFeatureCollection);
 			
 			// When a click event occurs on a feature in the places layer, open a popup at the
@@ -94,6 +113,8 @@
 			map.on('mouseleave', 'markers', function () {
 				map.getCanvas().style.cursor = '';
 			});
+			// Add map contols
+			map.addControl(new mapboxgl.NavigationControl());
 		});
 	});
 </script>
