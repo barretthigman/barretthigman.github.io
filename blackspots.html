@@ -2,11 +2,13 @@
 <html>
 <head>
     <meta charset='utf-8' />
-    <title>Display a map</title>
+    <title>Bright Unit | Blackspots</title>
     <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
     <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.51.0/mapbox-gl.js'></script>
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>   
-    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.51.0/mapbox-gl.css' rel='stylesheet' />
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    
+	<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+	<link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.51.0/mapbox-gl.css' rel='stylesheet' />
     <style>
         body { margin:0; padding:0; }
         #map { position:absolute; top:0; bottom:0; width:100%; }
@@ -15,26 +17,89 @@
 <body>
 
 <div id='map'></div>
-<script>
-    var blackspots = $.ajax({
-        url:"https://cors-anywhere.herokuapp.com/https://drive.google.com/file/d/1ZDoR-5OEdqQmg9y2NhjEVknZtcXdAz9_/view?usp=sharing",
+<script>   
+	var blackspots = $.ajax({
+        url:"https://spreadsheets.google.com/feeds/list/1xQrjIMeHSSPnSzXkNDpFiLKf8SlMqekvNItBqxIPNhs/1/public/full?alt=json",
         dataType: "json",
         success: console.log("Data successfully loaded!"),
         error: function (xhr) {
            alert(xhr.statusText)
         }
-    });  
-    
-    console.log(blackspots);
-    
-    mapboxgl.accessToken = 'pk.eyJ1IjoiYmhpZ21hbiIsImEiOiJjam96bXl5em4xaHZyM2tvM2N6OXR4OTJyIn0.vz5ZQkA92nD_2wVenoNxqw';
-    var map = new mapboxgl.Map({
-        container: 'map', // container id
-        style: 'mapbox://styles/mapbox/streets-v9', // stylesheet location
-        center: [146.9715,-36.7707], // starting position [lng, lat]
-        zoom: 9 // starting zoom
     });
-</script>
+	
+	var jsonFeature;
+	var first = true;
+	
+	$.when(blackspots).done(function() {
+		var entries = blackspots.responseJSON.feed.entry;
+		for (entry in entries) {
+			var photoName = entries[entry].title.$t;
+			var date = entries[entry].gsx$date.$t;
+			var latitude = entries[entry].gsx$latitude.$t;
+			var longitude = entries[entry].gsx$longitude.$t;
+			var altitude = entries[entry].gsx$altitude.$t;
+			var photoUrl = entries[entry].gsx$photourl.$t;
+			var photoId = entries[entry].gsx$photoid.$t;
+			
+			if (longitude != 'unknown' && latitude != 'unknown') {
+				var tempFeature = '{"type": "Feature","geometry": {"type": "Point","coordinates": [' + longitude + ',' + latitude + ']},"properties": {"description":"<strong>Loss of signal</strong><p>Date/time: ' + date + '<br>Latitude: ' + latitude + '<br>Longitude: ' + longitude + '<br>Altitude: ' + altitude + 'm<br><br><a href=\\"' + photoUrl + '\\" target=\\"_blank\\"><img src=\\"https://drive.google.com/uc?export=view&s=50&id=' + photoId + '\\" style=\\"width: 500px; max-width: 100%; height: auto\\" title=\\"Click for the larger version.\\"/></a></p>"}}';
+				if (first) {
+					jsonFeature = tempFeature;
+					first = false;
+				} else {
+					jsonFeature += ',' + tempFeature;
+				}
+			}
+		}
+		
+		mapboxgl.accessToken = 'pk.eyJ1IjoiYmhpZ21hbiIsImEiOiJjam96bXl5em4xaHZyM2tvM2N6OXR4OTJyIn0.vz5ZQkA92nD_2wVenoNxqw';
+			var map = new mapboxgl.Map({
+			container: 'map', // container id
+			style: 'mapbox://styles/mapbox/streets-v9', // stylesheet location
+			center: [146.9715,-36.7707], // starting position [lng, lat]
+			zoom: 9 // starting zoom
+		});
 
+		var jsonFeatureCollection = JSON.parse('{"id": "markers","type": "symbol","source": {"type": "geojson","data": {"type": "FeatureCollection","features": [' + jsonFeature + ']}},"layout": {"icon-image": "custom-marker"}}');
+		
+		map.loadImage("https://i.imgur.com/MK4NUzI.png", function(error, image) {
+			if (error) throw error;
+			map.addImage("custom-marker", image);
+		});
+		
+		map.on('load', function() {
+			map.addLayer(jsonFeatureCollection);
+			
+			// When a click event occurs on a feature in the places layer, open a popup at the
+			// location of the feature, with description HTML from its properties.
+			map.on('click', 'markers', function (e) {
+				var coordinates = e.features[0].geometry.coordinates.slice();
+				var description = e.features[0].properties.description;
+
+				// Ensure that if the map is zoomed out such that multiple
+				// copies of the feature are visible, the popup appears
+				// over the copy being pointed to.
+				while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+					coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+				}
+
+				new mapboxgl.Popup()
+					.setLngLat(coordinates)
+					.setHTML(description)
+					.addTo(map);
+			});
+
+			// Change the cursor to a pointer when the mouse is over the places layer.
+			map.on('mouseenter', 'markers', function () {
+				map.getCanvas().style.cursor = 'pointer';
+			});
+
+			// Change it back to a pointer when it leaves.
+			map.on('mouseleave', 'markers', function () {
+				map.getCanvas().style.cursor = '';
+			});
+		});
+	});
+</script>
 </body>
 </html>
