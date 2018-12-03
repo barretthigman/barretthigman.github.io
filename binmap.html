@@ -55,7 +55,7 @@
 			var myLayer = L.mapbox.featureLayer()
   				.loadURL('https://data.gov.au/dataset/fdb733a7-5f75-4e28-9856-a741b4c02c59/resource/9b49d0c3-8d21-4636-bea2-904f181c57b5/download/alpine-shire-council-garbage-collection-zones.json')
 				.on('ready', function() {
-    				onEachFeature: function(feature, layer) {
+    				onEachFeature: function(feature, layer {
 					layer.bindPopup(feature.properties.name);
 				}
 					
